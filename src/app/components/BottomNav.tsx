@@ -13,7 +13,7 @@ export function BottomNav() {
   ];
 
   return (
-    <nav className="absolute bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-48px)] bg-[#16232B]/95 backdrop-blur-xl rounded-[100px] h-[72px] z-50 flex items-center justify-center gap-10 shadow-[0_20px_40px_rgba(0,0,0,0.2),0_0_0_1px_rgba(255,255,255,0.1)_inset]">
+    <nav className="absolute bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-48px)] bg-[#16232B] rounded-[36px] h-[72px] z-50 flex items-center justify-around px-2.5 shadow-[0_12px_32px_rgba(0,0,0,0.24)]">
       {navItems.map((item) => {
         const isActive = location.pathname === item.path;
         const Icon = item.icon;
@@ -22,12 +22,12 @@ export function BottomNav() {
           <button
             key={item.path}
             onClick={() => navigate(item.path)}
-            className="relative flex items-center justify-center w-12 h-12 rounded-full transition-all duration-300 active:scale-90"
+            className="relative flex items-center justify-center w-12 h-12 rounded-[24px] transition-all duration-300 active:scale-90 group"
           >
             {isActive && (
               <motion.div
                 layoutId="bottom-nav-bg"
-                className="absolute inset-0 bg-[#075056] rounded-full"
+                className="absolute inset-0 bg-[#FF5B04] rounded-[24px]"
                 transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
               />
             )}
@@ -35,7 +35,7 @@ export function BottomNav() {
               size={22}
               strokeWidth={1.5}
               className={`relative z-10 transition-colors duration-300 ${
-                isActive ? 'text-white' : 'text-white/40'
+                isActive ? 'text-white' : 'text-white/40 group-hover:text-white/60'
               }`}
             />
           </button>

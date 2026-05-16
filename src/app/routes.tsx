@@ -14,6 +14,8 @@ import { SupportScreen } from "./screens/SupportScreen";
 import { EditProfileScreen } from "./screens/EditProfileScreen";
 import { BankAccountsScreen } from "./screens/BankAccountsScreen";
 import { KycScreen } from "./screens/KycScreen";
+import { InvestorsScreen } from "./screens/InvestorsScreen";
+
 
 export const router = createBrowserRouter([
   {
@@ -76,4 +78,9 @@ export const router = createBrowserRouter([
     path: "/kyc",
     Component: KycScreen,
   },
+  {
+    path: "/investors",
+    Component: InvestorsScreen,
+  },
+
 ]);

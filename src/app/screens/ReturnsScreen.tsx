@@ -1,38 +1,38 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { ArrowLeft, Check, RefreshCw, ArrowUpRight, Info, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, Check, RefreshCw, Info, CheckCircle2, Clock } from 'lucide-react';
 import { toast } from 'sonner';
 import { MobileLayout } from '../components/MobileLayout';
 
-const distributionList = [
-  { id: 1, name: 'Anjali Sharma', amount: 520, percent: 10, avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop', verified: true },
-  { id: 2, name: 'Rahul Verma', amount: 260, percent: 10, avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop', verified: true },
-  { id: 3, name: 'Priya Patel', amount: 1040, percent: 10, avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop', verified: true },
-  { id: 4, name: 'Amit Singh', amount: 312, percent: 10, avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop', verified: false },
+const initialInvestors = [
+  { id: 1, name: 'Anjali Sharma', amount: 520, avatar: 'https://loremflickr.com/100/100/indian,woman?lock=1' },
+  { id: 2, name: 'Rahul Verma', amount: 260, avatar: 'https://loremflickr.com/100/100/indian,man?lock=2' },
 ];
 
 export function ReturnsScreen() {
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
   const [distributed, setDistributed] = useState(false);
-  const [actionState, setActionState] = useState<Record<number, 'approved' | 'rejected' | null>>({});
+  const [payoutStates, setPayoutStates] = useState<Record<number, 'Pending' | 'Initiated' | 'Sent'>>({
+    1: 'Pending',
+    2: 'Pending'
+  });
 
-  const handleDistribute = () => {
+  const handleDistributeAll = () => {
     setIsProcessing(true);
     setTimeout(() => {
       setIsProcessing(false);
       setDistributed(true);
-      toast.success('Returns distributed to 24 investors');
+      setPayoutStates({ 1: 'Sent', 2: 'Sent' });
+      toast.success('All returns distributed successfully');
     }, 2000);
   };
 
-  const handleApprove = (id: number, name: string) => {
-    setActionState(prev => ({ ...prev, [id]: 'approved' }));
-    toast.success(`Distribution approved for ${name}`);
-  };
-  const handleReject = (id: number, name: string) => {
-    setActionState(prev => ({ ...prev, [id]: 'rejected' }));
-    toast.error(`Distribution declined for ${name}`);
+  const processPayout = (id: number) => {
+    setPayoutStates(prev => ({ ...prev, [id]: 'Initiated' }));
+    setTimeout(() => {
+      setPayoutStates(prev => ({ ...prev, [id]: 'Sent' }));
+    }, 2000);
   };
 
   const Header = (
@@ -40,119 +40,96 @@ export function ReturnsScreen() {
       <button onClick={() => navigate(-1)} className="w-8 h-8 flex items-center justify-center text-[#16232B]">
         <ArrowLeft size={20} strokeWidth={1} />
       </button>
-      <span className="text-[#16232B] font-normal tracking-tight text-sm">Returns & Distributions</span>
+      <span className="text-[#16232B] font-medium tracking-tight text-sm">Returns & Distributions</span>
       <div className="w-8" />
     </div>
   );
 
   return (
     <MobileLayout header={Header}>
-      <div className="px-6 pt-8 pb-4 space-y-6">
+      <div className="px-6 pt-2 pb-32 flex flex-col gap-6">
 
-        {/* Accrued Returns Hero */}
+        {/* Hero Card */}
         <section>
-          <div className="rounded-3xl bg-[#075056] shadow-xl shadow-[#075056]/20 px-6 py-6 space-y-4 text-white">
-            <span className="text-[10px] text-[#E4EEF0]/70 tracking-[0.2em] uppercase font-normal">Accrued Returns</span>
-            <p className="text-[40px] font-normal tracking-tighter leading-none">₹8,450</p>
-            <div className="flex items-center gap-6 pt-2 border-t border-white/10">
-              <div className="space-y-0.5">
-                <p className="text-[9px] text-[#E4EEF0]/40 uppercase tracking-widest">Recipients</p>
-                <p className="text-base font-normal">24</p>
+          <div className="bg-[#16232B] rounded-[32px] p-8 text-white shadow-2xl shadow-black/20">
+            <div className="flex justify-between mb-4">
+              <div>
+                <p className="text-[10px] text-white/40 uppercase tracking-[0.2em] mb-2 font-bold">Investor Shares</p>
+                <p className="text-[48px] font-normal tracking-tighter leading-none">₹8,450</p>
               </div>
-              <div className="w-[1px] h-6 bg-white/10" />
-              <div className="space-y-0.5">
-                <p className="text-[9px] text-[#E4EEF0]/40 uppercase tracking-widest">Interval</p>
-                <p className="text-base font-normal">Monthly</p>
+              <button className="text-white/40 p-2 hover:text-white transition-colors">
+                <Info size={20} strokeWidth={1.5} />
+              </button>
+            </div>
+            <div className="flex gap-10 pt-6 border-t border-white/10 mt-2">
+              <div>
+                <p className="text-[10px] text-white/40 uppercase tracking-widest mb-1 font-bold">Investors</p>
+                <p className="text-xl font-normal">48</p>
               </div>
-              <div className="w-[1px] h-6 bg-white/10" />
-              <div className="space-y-0.5">
-                <p className="text-[9px] text-[#E4EEF0]/40 uppercase tracking-widest">Rate</p>
-                <p className="text-base font-normal">10%</p>
+              <div className="w-[1px] h-10 bg-white/10" />
+              <div>
+                <p className="text-[10px] text-white/40 uppercase tracking-widest mb-1 font-bold">Due Date</p>
+                <p className="text-xl font-normal text-[#FF5B04]">30 May</p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Info Banner */}
-        <section className="flex gap-3 px-5 py-4 rounded-xl bg-[#075056]/50 border border-white/10 text-white">
-          <Info className="text-[#FF5B04] flex-shrink-0 mt-0.5" size={14} strokeWidth={1.5} />
-          <p className="text-[11px] text-[#E4EEF0]/70 leading-relaxed font-normal">
-            Based on verified revenue of <span className="text-white">₹1,24,500</span>. Distributions are processed instantly via Nanopie Smart Contracts.
-          </p>
-        </section>
-
-        {/* Breakdown */}
-        <section className="bg-white rounded-3xl shadow-xl shadow-[#16232B]/5 overflow-hidden text-[#16232B]">
-          <div className="px-6 pt-5 pb-1">
-            <h3 className="text-[10px] text-[#16232B]/40 uppercase tracking-widest font-normal">Distribution Breakdown</h3>
-          </div>
-          <div className="space-y-0">
-            <div className="flex items-center justify-between px-6 py-4 border-t border-[#16232B]/5">
-              <div className="space-y-0.5">
-                <p className="text-sm font-normal text-[#16232B]">Profit Sharing</p>
-                <p className="text-[10px] text-[#16232B]/50 font-normal">Direct cash distribution</p>
-              </div>
-              <p className="text-sm font-normal text-[#16232B]">₹6,200</p>
+        {/* Breakdown Card */}
+        <section className="bg-white rounded-[32px] shadow-sm border border-[#16232B]/5 overflow-hidden">
+          <div className="p-6 pb-0 text-[10px] text-[#16232B]/40 uppercase tracking-[0.2em] font-bold">Distribution Breakdown</div>
+          <div className="p-6 flex flex-col gap-4">
+            <div className="flex justify-between text-sm">
+              <span className="text-[#16232B]/60">Vendor to Customer</span>
+              <span className="font-medium text-[#16232B]">₹8,435</span>
             </div>
-            <div className="flex items-center justify-between px-6 py-4 border-t border-[#16232B]/5">
-              <div className="space-y-0.5">
-                <p className="text-sm font-normal text-[#16232B]/50">Merchant Rewards</p>
-                <p className="text-[10px] text-[#16232B]/30 font-normal">Shop credit conversion</p>
-              </div>
-              <p className="text-sm font-normal text-[#16232B]/50">₹2,250</p>
+            <div className="flex justify-between text-sm">
+              <span className="text-[#16232B]/60">0.05% Platform Fee</span>
+              <span className="font-medium text-[#16232B]">₹13</span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-[#16232B]/60">GST on Fee (18%)</span>
+              <span className="font-medium text-[#16232B]">₹2</span>
+            </div>
+            <div className="flex justify-between border-t border-[#16232B]/5 pt-4 text-base">
+              <span className="text-[#16232B]">Total Distribution</span>
+              <span className="text-[#FF5B04] font-bold">₹8,450</span>
             </div>
           </div>
         </section>
 
-        {/* Per-Investor List */}
-        <section className="bg-white rounded-3xl shadow-xl shadow-[#16232B]/5 overflow-hidden text-[#16232B]">
-          <div className="px-6 pt-5 pb-1">
-            <h3 className="text-[10px] text-[#16232B]/40 uppercase tracking-widest font-normal">Investor Payouts</h3>
-          </div>
-          <div className="space-y-0">
-            {distributionList.map((investor) => {
-              const status = actionState[investor.id];
+        {/* Recent Payouts */}
+        <section className="bg-white rounded-[32px] shadow-sm border border-[#16232B]/5 overflow-hidden">
+          <div className="p-6 pb-0 text-[10px] text-[#16232B]/40 uppercase tracking-[0.2em] font-bold">Recent Payouts</div>
+          <div className="mt-4">
+            {initialInvestors.map((investor) => {
+              const status = payoutStates[investor.id];
               return (
-                <div key={investor.id} className="flex items-center justify-between px-6 py-5 border-t border-[#16232B]/5">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-full overflow-hidden border border-[#16232B]/5 flex-shrink-0">
-                      <img src={investor.avatar} alt={investor.name} className="w-full h-full object-cover" />
+                <div key={investor.id} className="flex justify-between items-center p-6 border-t border-[#16232B]/5">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-full overflow-hidden border border-[#16232B]/10 shadow-sm">
+                      <img src={investor.avatar} className="w-full h-full object-cover" alt={investor.name} />
                     </div>
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-1.5">
-                        <p className="text-sm font-normal text-[#16232B]">{investor.name}</p>
-                        {investor.verified && (
-                          <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-[#16232B]/5 text-[#16232B]/60 text-[8px] tracking-wide uppercase font-normal">
-                            <span className="w-1 h-1 rounded-full bg-[#FF5B04]" />
-                            KYC
-                          </span>
-                        )}
-                      </div>
-                      <p className="text-[10px] text-[#16232B]/40 font-normal">₹{investor.amount.toLocaleString()} · {investor.percent}% yield</p>
+                    <div>
+                      <p className="text-base text-[#16232B] font-medium leading-tight">{investor.name}</p>
+                      <p className="text-xs text-[#16232B]/40 mt-0.5">₹{investor.amount}</p>
                     </div>
                   </div>
                   <div>
-                    {distributed || status === 'approved' ? (
-                      <div className="flex items-center gap-1.5 text-[#22C55E]">
-                        <CheckCircle2 size={14} strokeWidth={1.5} />
-                        <span className="text-[10px] font-normal uppercase tracking-widest">Sent</span>
+                    {status === 'Pending' ? (
+                      <button 
+                        onClick={() => processPayout(investor.id)}
+                        className="bg-[#16232B] text-white px-5 py-2.5 rounded-xl text-[10px] uppercase tracking-[0.2em] font-bold active:scale-95 transition-all shadow-lg shadow-black/10"
+                      >
+                        Pay
+                      </button>
+                    ) : status === 'Initiated' ? (
+                      <div className="animate-pulse text-[#FF5B04] text-[10px] uppercase font-bold flex items-center gap-1.5 tracking-widest">
+                        <Clock size={12} strokeWidth={2.5} /> Initiated
                       </div>
-                    ) : status === 'rejected' ? (
-                      <span className="text-[10px] text-[#FF5B04] font-normal uppercase tracking-widest">Declined</span>
                     ) : (
-                      <div className="flex items-center gap-2">
-                        <button
-                          onClick={() => handleApprove(investor.id, investor.name)}
-                          className="px-3.5 py-2 rounded-xl bg-[#075056] text-white text-[10px] font-normal uppercase tracking-widest active:scale-95 transition-all"
-                        >
-                          Approve
-                        </button>
-                        <button
-                          onClick={() => handleReject(investor.id, investor.name)}
-                          className="px-3.5 py-2 rounded-xl border border-[#FF5B04] text-[#FF5B04] bg-transparent text-[10px] font-normal uppercase tracking-widest active:scale-95 transition-all"
-                        >
-                          Reject
-                        </button>
+                      <div className="text-[#00C896] text-[10px] uppercase font-bold flex items-center gap-1.5 tracking-widest">
+                        <CheckCircle2 size={12} strokeWidth={2.5} /> Sent
                       </div>
                     )}
                   </div>
@@ -160,35 +137,40 @@ export function ReturnsScreen() {
               );
             })}
           </div>
+          <button 
+            onClick={() => navigate('/investors')} 
+            className="w-full p-5 text-[10px] text-[#075056] uppercase font-black tracking-[0.3em] border-t border-[#16232B]/5 hover:bg-[#E4EEF0]/30 transition-colors"
+          >
+            See All 48 Investors
+          </button>
         </section>
 
-        {/* CTA */}
-        <section className="pt-2 pb-4 space-y-4">
+        {/* Main CTA */}
+        <section className="mt-2">
           {!distributed ? (
             <button
               disabled={isProcessing}
-              onClick={handleDistribute}
-              className="w-full bg-[#075056] text-white py-5 rounded-xl text-sm font-normal flex items-center justify-center gap-3 transition-all active:scale-[0.98] disabled:bg-[#16232B]/10 disabled:text-[#16232B]/20"
+              onClick={handleDistributeAll}
+              className={`w-full py-5 rounded-[24px] text-sm font-bold flex items-center justify-center gap-3 transition-all active:scale-[0.98] shadow-xl ${isProcessing ? 'bg-white text-[#FF5B04] border-2 border-[#FF5B04]' : 'bg-[#FF5B04] text-white shadow-[#FF5B04]/30'}`}
             >
               {isProcessing ? (
-                <RefreshCw size={16} strokeWidth={1.5} className="animate-spin" />
+                <>
+                  <RefreshCw size={18} strokeWidth={2.5} className="animate-spin" />
+                  Initiating...
+                </>
               ) : (
                 <>
-                  <Check size={16} strokeWidth={1.5} />
+                  <Check size={18} strokeWidth={2.5} />
                   Confirm & Distribute All
                 </>
               )}
             </button>
           ) : (
-            <div className="w-full bg-white border border-[#16232B]/8 py-5 rounded-xl flex items-center justify-center gap-2">
-              <CheckCircle2 size={16} strokeWidth={1.5} className="text-[#15803D]" />
-              <span className="text-sm font-normal text-[#16232B]">All Returns Distributed</span>
+            <div className="w-full bg-white border border-[#16232B]/10 py-5 rounded-[24px] flex items-center justify-center gap-2 text-[#16232B]/40">
+              <CheckCircle2 size={18} strokeWidth={2.5} className="text-[#00C896]" />
+              <span className="text-sm font-bold tracking-tight">All Returns Distributed</span>
             </div>
           )}
-          <button className="w-full py-2 flex items-center justify-center gap-2 group">
-            <span className="text-[10px] text-[#16232B]/30 uppercase tracking-widest font-normal">Investor Ledger</span>
-            <ArrowUpRight size={12} strokeWidth={1} className="text-[#16232B]/20 group-hover:text-[#075056] transition-colors" />
-          </button>
         </section>
 
       </div>

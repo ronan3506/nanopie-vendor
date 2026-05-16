@@ -14,12 +14,17 @@ const history = [
 export function RevenueScreen() {
   const navigate = useNavigate();
   const [revenue, setRevenue] = useState('');
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!revenue) return;
+    setIsSubmitted(true);
     toast.success(`₹${revenue} logged successfully`);
-    setRevenue('');
+    setTimeout(() => {
+      setIsSubmitted(false);
+      setRevenue('');
+    }, 4000);
   };
 
   const Header = (
@@ -27,96 +32,112 @@ export function RevenueScreen() {
       <button onClick={() => navigate(-1)} className="w-8 h-8 flex items-center justify-center text-[#16232B]">
         <ArrowLeft size={20} strokeWidth={1} />
       </button>
-      <span className="text-[#16232B] font-normal tracking-tight text-sm">Revenue Tracker</span>
+      <span className="text-[#16232B] font-medium tracking-tight text-sm">Revenue Tracker</span>
       <div className="w-8" />
     </div>
   );
 
   return (
     <MobileLayout header={Header}>
-      <div className="px-6 pt-8 pb-4 space-y-6">
+      <div className="px-5 pt-4 pb-32 flex flex-col gap-5">
 
         {/* Weekly Summary Card */}
         <section>
-          <div className="rounded-3xl bg-[#075056] shadow-xl shadow-[#075056]/20 px-6 py-6 space-y-4 text-white">
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] text-[#E4EEF0]/70 tracking-[0.2em] uppercase font-normal">Weekly Performance</span>
-              <div className="flex items-center gap-1.5 text-[#E4EEF0]">
-                <Calendar size={11} strokeWidth={1.5} />
-                <span className="text-[10px] font-normal">16 — 22 Apr</span>
+          <div className="rounded-[28px] bg-[#075056] shadow-xl shadow-[#075056]/20 p-6 text-white">
+            <div className="flex justify-between items-center mb-4">
+              <span className="text-[9px] text-white/60 uppercase tracking-[0.22em] font-medium">Weekly Performance</span>
+              <div className="flex items-center gap-1.5 bg-white/10 rounded-full px-3 py-1">
+                <Calendar size={12} strokeWidth={1.5} className="opacity-60" />
+                <span className="text-[10px] text-white/70">16 — 22 Apr</span>
               </div>
             </div>
             <div className="flex items-baseline gap-3">
-              <p className="text-[36px] font-normal tracking-tighter leading-none">₹31,600</p>
-              <div className="flex items-center gap-1 text-[#FF5B04]">
-                <TrendingUp size={12} strokeWidth={1.5} />
-                <span className="text-[10px] font-normal">+8%</span>
+              <p className="text-[38px] font-normal tracking-tight">₹31,600</p>
+              <div className="flex items-center gap-1 text-[#FF6B35]">
+                <TrendingUp size={13} strokeWidth={2.5} />
+                <span className="text-[11px] font-semibold">+8%</span>
               </div>
             </div>
           </div>
         </section>
 
         {/* Log Input Card */}
-        <section className="bg-white rounded-3xl shadow-xl shadow-[#16232B]/5 px-6 py-6 space-y-5 text-[#16232B]">
-          <div className="space-y-0.5">
-            <h3 className="text-sm font-normal">Log Daily Sales</h3>
-            <p className="text-[11px] text-[#16232B]/50 font-normal">Report today's gross revenue to investors</p>
-          </div>
-          <form onSubmit={handleSubmit} className="relative">
-            <div className="absolute left-0 top-1/2 -translate-y-1/2 text-xl font-normal text-[#16232B]/30">₹</div>
-            <input
-              type="number"
-              placeholder="0"
-              value={revenue}
-              onChange={(e) => setRevenue(e.target.value)}
-              className="w-full bg-transparent border-b border-[#16232B]/10 py-4 pl-7 pr-14 text-3xl font-normal text-[#16232B] focus:outline-none focus:border-[#FF5B04] transition-colors placeholder:text-[#16232B]/20"
-            />
-            <button
-              type="submit"
-              disabled={!revenue}
-              className="absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#075056] text-white rounded-full flex items-center justify-center disabled:bg-[#16232B]/5 disabled:text-[#16232B]/20 transition-all active:scale-95"
-            >
-              <Plus size={18} strokeWidth={1.5} />
-            </button>
-          </form>
+        <section className="bg-white rounded-[28px] px-6 py-6 shadow-sm shadow-black/[0.03] border border-[#16232B]/5">
+          <h3 className="text-[15px] font-semibold text-[#16232B]">Log Daily Sales</h3>
+          <p className="text-[11px] text-[#16232B]/50 mt-0.5">Report today's gross revenue to investors</p>
+          
+          {isSubmitted ? (
+            <div className="flex items-center justify-between mt-6 animate-in fade-in slide-in-from-bottom-2">
+              <p className="text-[20px] font-semibold text-[#075056]">Sale Addition Requested</p>
+              <div className="w-9 h-9 rounded-full border-2 border-[#075056] flex items-center justify-center">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#075056" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              </div>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="flex items-center gap-4 mt-6">
+              <span className="text-2xl text-[#16232B]/30 flex-shrink-0">₹</span>
+              <input
+                type="number"
+                placeholder="0"
+                value={revenue}
+                onChange={(e) => setRevenue(e.target.value)}
+                className="flex-1 bg-transparent border-none text-3xl text-[#16232B] outline-none font-light min-w-0"
+                autoFocus
+              />
+              <button
+                type="submit"
+                disabled={!revenue}
+                className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 flex-shrink-0"
+                style={{ 
+                  background: revenue ? '#FF6B35' : '#e0e8e9',
+                  opacity: revenue ? 1 : 0.5,
+                  boxShadow: revenue ? '0 10px 20px rgba(255, 107, 53, 0.3)' : 'none'
+                }}
+              >
+                <Plus size={20} strokeWidth={2.5} className="text-white" />
+              </button>
+            </form>
+          )}
         </section>
 
         {/* History List */}
-        <section className="bg-white rounded-3xl shadow-xl shadow-[#16232B]/5 overflow-hidden pb-2 text-[#16232B]">
-          <div className="flex items-center justify-between px-6 pt-5 pb-3">
-            <span className="text-[10px] text-[#16232B]/40 uppercase tracking-widest font-normal">Recent Logs</span>
-            <button className="text-[10px] text-[#FF5B04] uppercase tracking-widest font-normal">View All</button>
+        <div>
+          <div className="flex items-center justify-between mb-3 px-1">
+            <span className="text-[9px] text-[#16232B]/40 uppercase tracking-[0.22em] font-bold">Recent Logs</span>
+            <button className="text-[10px] font-bold text-[#FF6B35] uppercase tracking-[0.15em] hover:opacity-80 transition-opacity">View All</button>
           </div>
-          <div className="space-y-0">
-            {history.map((item) => (
-              <div key={item.id} className="flex items-center justify-between px-6 py-4 border-t border-[#16232B]/5">
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-[#16232B]/5 flex items-center justify-center flex-shrink-0">
-                    <Clock size={14} strokeWidth={1.5} className="text-[#FF5B04]" />
+          <div className="bg-white rounded-[28px] shadow-sm shadow-black/[0.03] border border-[#16232B]/5 overflow-hidden">
+            {history.map((item, idx) => (
+              <div key={item.id} className={`flex items-center justify-between px-6 py-4 ${idx !== history.length - 1 ? 'border-b border-[#16232B]/5' : ''}`}>
+                <div className="flex items-center gap-4">
+                  <div className="w-9 h-9 rounded-full bg-[#FFF0E8] flex items-center justify-center flex-shrink-0">
+                    <Clock size={16} strokeWidth={1.5} className="text-[#FF6B35]" />
                   </div>
-                  <div className="space-y-0.5">
-                    <p className="text-sm font-normal text-[#16232B]">{item.date}</p>
-                    <p className="text-[10px] text-[#16232B]/40 font-normal">{item.time}</p>
+                  <div>
+                    <p className="text-[13px] font-medium text-[#16232B] leading-tight">{item.date}</p>
+                    <p className="text-[10px] text-[#16232B]/40 mt-0.5">{item.time}</p>
                   </div>
                 </div>
-                <div className="text-right space-y-1.5">
-                  <p className="text-sm font-normal text-[#16232B]">₹{item.amount.toLocaleString()}</p>
-                  {item.verified ? (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#22C55E]/10 text-[#22C55E] text-[9px] tracking-wide uppercase font-normal">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E]" />
-                      Verified
-                    </span>
-                  ) : (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#FF5B04]/10 text-[#FF5B04] text-[9px] tracking-wide uppercase font-normal">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#FF5B04]" />
-                      Pending
-                    </span>
-                  )}
+                <div className="text-right">
+                  <p className="text-[14px] font-semibold text-[#16232B]">₹{item.amount.toLocaleString()}</p>
+                  <div className="mt-1">
+                    {item.verified ? (
+                      <span className="flex items-center gap-1 text-[10px] font-bold text-[#00C896]">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#00C896] inline-block"></span>
+                        VERIFIED
+                      </span>
+                    ) : (
+                      <span className="flex items-center gap-1 text-[10px] font-bold text-[#FF6B35]">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#FF6B35] inline-block"></span>
+                        PENDING
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
             ))}
           </div>
-        </section>
+        </div>
 
       </div>
     </MobileLayout>
