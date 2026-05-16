@@ -27,7 +27,7 @@ export function BottomNav() {
             {isActive && (
               <motion.div
                 layoutId="bottom-nav-bg"
-                className="absolute inset-0 bg-[#FF5B04] rounded-[24px]"
+                className="absolute inset-0 bg-[#1D4F4F] rounded-[24px]"
                 transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
               />
             )}

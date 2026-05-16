@@ -109,9 +109,11 @@ export function ProfileScreen() {
                   <p className="text-sm font-medium">{item.value}</p>
                 </div>
               </div>
-              <ChevronRight size={16} strokeWidth={2} className="text-border" />
+
             </button>
+
           ))}
+
           
           <button
             onClick={() => navigate('/bank-accounts')}
