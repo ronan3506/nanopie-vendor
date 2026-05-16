@@ -79,9 +79,9 @@ export function SettingsScreen() {
               </div>
               <button 
                 onClick={handleToggleTheme}
-                className={\`w-[42px] h-6 rounded-full flex items-center p-1 transition-colors relative cursor-pointer active:scale-95 \${isDark ? 'bg-secondary' : 'bg-muted'}\`}
+                className={`w-[42px] h-6 rounded-full flex items-center p-1 transition-colors relative cursor-pointer active:scale-95 ${isDark ? 'bg-secondary' : 'bg-muted'}`}
               >
-                <div className={\`w-[18px] h-[18px] bg-white rounded-full shadow-sm absolute transition-all duration-300 \${isDark ? 'right-1' : 'left-1'}\`} />
+                <div className={`w-[18px] h-[18px] bg-white rounded-full shadow-sm absolute transition-all duration-300 ${isDark ? 'right-1' : 'left-1'}`} />
               </button>
             </div>
           </div>
