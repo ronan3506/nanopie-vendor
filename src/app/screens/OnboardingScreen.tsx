@@ -40,9 +40,9 @@ const slides = [
     badge: 'RETURNS',
     headline: 'Share the\nprofit. Keep\nthe loyalty.',
     sub: 'Distribute returns to investors with one tap. Build trust that compounds like interest.',
-    bg: '#FF5B04',
-    accent: '#16232B',
-    textColor: '#fff',
+    bg: '#0A3D2E',
+    accent: '#FF5B04',
+    textColor: '#E4EEF0',
     illustration: 'returns',
   },
 ];
@@ -231,7 +231,7 @@ export function OnboardingScreen() {
 
   const goNext = () => {
     if (isLast) {
-      navigate('/');
+      navigate('/login');
     } else {
       goTo(current + 1);
     }
