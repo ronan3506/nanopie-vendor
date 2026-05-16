@@ -23,15 +23,21 @@ export function ActiveFundingScreen() {
       <div className="px-6 pt-4 pb-32 flex flex-col gap-8 bg-[#E4EEF0] min-h-full">
         
         {/* Image Section */}
-        <section className="relative h-[220px] rounded-[32px] overflow-hidden shadow-sm">
-          <img 
-            src="https://images.unsplash.com/photo-1770998312182-9bea1a43ba19?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600" 
-            className="w-full h-full object-cover"
-            alt="Live Campaign"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-transparent"></div>
-          <div className="absolute top-5 left-5 bg-white text-[#075056] px-4 py-2 rounded-full text-[10px] uppercase tracking-widest font-bold shadow-sm">Live Campaign</div>
+        <section className="flex flex-col gap-6">
+          <div className="relative h-[220px] rounded-[32px] overflow-hidden shadow-sm">
+            <img 
+              src="https://images.unsplash.com/photo-1770998312182-9bea1a43ba19?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=600" 
+              className="w-full h-full object-cover"
+              alt="Live Campaign"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-transparent"></div>
+            <div className="absolute top-5 left-5 bg-white text-[#075056] px-4 py-2 rounded-full text-[10px] uppercase tracking-widest font-bold shadow-sm">Live Campaign</div>
+          </div>
+          <h1 className="text-[32px] font-bold text-[#16232B] tracking-tight leading-tight px-1">
+            Diwali Sweets Expansion
+          </h1>
         </section>
+
 
         {/* Funding Stats Card */}
         <section className="bg-[#075056] rounded-[32px] p-8 text-white shadow-xl shadow-[#075056]/20">
