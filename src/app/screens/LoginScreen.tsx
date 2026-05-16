@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate, useLocation } from 'react-router';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
@@ -7,7 +7,10 @@ import logo from "../../imports/pasted_text/logo.png";
 
 export function LoginScreen() {
   const navigate = useNavigate();
-  const [step, setStep] = useState(0);
+  const location = useLocation();
+  // Skip the logo splash if arriving from the onboarding carousel
+  const skipSplash = (location.state as { fromOnboarding?: boolean } | null)?.fromOnboarding === true;
+  const [step, setStep] = useState(skipSplash ? 1 : 0);
   const [phone, setPhone] = useState('');
   const [otp, setOtp] = useState('');
 

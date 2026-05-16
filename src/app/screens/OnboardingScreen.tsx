@@ -231,7 +231,7 @@ export function OnboardingScreen() {
 
   const goNext = () => {
     if (isLast) {
-      navigate('/login');
+      navigate('/login', { state: { fromOnboarding: true } });
     } else {
       goTo(current + 1);
     }
