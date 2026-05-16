@@ -15,11 +15,7 @@ export function PhoneFrame({ children }: PhoneFrameProps) {
 
       {/* Device Frame */}
       <div className="relative mx-auto border-[12px] border-[#2B3544] bg-[#1e293b] rounded-[48px] h-[90vh] max-h-[920px] w-[420px] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.6)] overflow-hidden flex flex-col">
-        {/* Notch Area */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[160px] h-[34px] bg-[#2B3544] rounded-b-[24px] z-[100] flex items-center justify-center gap-3">
-            <div className="w-12 h-1 bg-black/40 rounded-full"></div>
-            <div className="w-2 h-2 bg-black/40 rounded-full"></div>
-        </div>
+
 
         {/* Inner Content Container */}
         <div className="flex-1 bg-[#E4EEF0] relative overflow-hidden">
