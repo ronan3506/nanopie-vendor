@@ -160,7 +160,7 @@ export function ProfileScreen() {
         {/* Logout */}
         <div className="pt-2 pb-6 text-center">
           <button
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/login')}
             className="text-muted-foreground hover:text-foreground text-[10px] uppercase tracking-[0.2em] font-bold transition-colors inline-flex items-center gap-2"
           >
             <LogOut size={14} strokeWidth={1.5} />

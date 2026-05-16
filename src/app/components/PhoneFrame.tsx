@@ -6,31 +6,28 @@ interface PhoneFrameProps {
 
 export function PhoneFrame({ children }: PhoneFrameProps) {
   return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4 sm:p-8 font-sans">
+    <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4 sm:p-8 font-sans relative overflow-hidden">
+      {/* Decorative background elements */}
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-[#FF5B04]/5 blur-[120px] rounded-full"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-[#075056]/10 blur-[120px] rounded-full"></div>
+      </div>
+
       {/* Device Frame */}
-      <div className="relative mx-auto border-gray-800 dark:border-gray-800 bg-gray-800 border-[14px] rounded-[2.5rem] h-[800px] w-[380px] shadow-2xl overflow-hidden">
-        {/* Notch */}
-        <div className="h-[32px] w-[30%] bg-gray-800 absolute top-0 left-1/2 -translate-x-1/2 rounded-b-[1rem] z-50"></div>
-        
-        {/* Speaker/Sensors */}
-        <div className="absolute top-[12px] left-1/2 -translate-x-1/2 flex gap-1 z-50">
-          <div className="h-[4px] w-[40px] bg-gray-900 rounded-full"></div>
-          <div className="h-[4px] w-[4px] bg-gray-900 rounded-full"></div>
+      <div className="relative mx-auto border-[12px] border-[#2B3544] bg-[#1e293b] rounded-[48px] h-[90vh] max-h-[920px] w-[420px] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.6)] overflow-hidden flex flex-col">
+        {/* Notch Area */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[160px] h-[34px] bg-[#2B3544] rounded-b-[24px] z-[100] flex items-center justify-center gap-3">
+            <div className="w-12 h-1 bg-black/40 rounded-full"></div>
+            <div className="w-2 h-2 bg-black/40 rounded-full"></div>
         </div>
 
         {/* Inner Content Container */}
-        <div className="h-full w-full bg-white relative overflow-hidden">
+        <div className="flex-1 bg-[#E4EEF0] relative overflow-hidden">
           {children}
         </div>
 
         {/* Home Indicator */}
-        <div className="h-[5px] w-[120px] bg-gray-800 absolute bottom-2 left-1/2 -translate-x-1/2 rounded-full z-50 opacity-20 hover:opacity-100 transition-opacity"></div>
-      </div>
-
-      {/* Decorative background elements */}
-      <div className="fixed top-0 left-0 w-full h-full -z-10 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-500/10 blur-[120px] rounded-full"></div>
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-orange-500/10 blur-[120px] rounded-full"></div>
+        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-[120px] h-[5px] bg-black/10 rounded-full z-[100]"></div>
       </div>
     </div>
   );

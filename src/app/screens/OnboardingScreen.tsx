@@ -271,7 +271,7 @@ export function OnboardingScreen() {
             key={current}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/login')}
             className="text-[10px] font-bold tracking-[0.2em] uppercase"
             style={{ color: slide.textColor, opacity: 0.4 }}
           >
