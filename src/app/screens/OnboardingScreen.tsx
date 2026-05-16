@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
@@ -46,6 +46,34 @@ const slides = [
     illustration: 'returns',
   },
 ];
+
+// --- Splash Screen Component ---
+
+function SplashScreen() {
+  return (
+    <motion.div
+      initial={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.8, ease: "easeInOut" }}
+      className="fixed inset-0 z-[100] bg-[#16232B] flex flex-col items-center justify-center"
+    >
+      <motion.div
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 1, ease: "easeOut" }}
+        className="flex flex-col items-center gap-6"
+      >
+        <img src={logo} className="h-16 w-auto brightness-0 invert" alt="Nanopie" />
+        <motion.div 
+          initial={{ width: 0 }}
+          animate={{ width: 100 }}
+          transition={{ delay: 0.5, duration: 1.5, ease: "easeInOut" }}
+          className="h-[2px] bg-[#FF5B04]"
+        />
+      </motion.div>
+    </motion.div>
+  );
+}
 
 // --- Illustration Components ---
 
@@ -191,7 +219,7 @@ function ReturnsIllustration() {
               <div className="w-14 h-14 rounded-2xl bg-[#16232B] flex items-center justify-center shadow-lg">
                 <span className="text-white text-lg font-bold">{inv.avatar}</span>
               </div>
-              <span className="text-[10px] font-bold text-[#16232B]/70">{inv.amount}</span>
+              <span className="text-[10px] font-bold text-white/90">{inv.amount}</span>
             </motion.div>
           ))}
         </div>
@@ -219,7 +247,15 @@ export function OnboardingScreen() {
   const navigate = useNavigate();
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(1);
+  const [showSplash, setShowSplash] = useState(true);
   const touchStartX = useRef<number | null>(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSplash(false);
+    }, 2800);
+    return () => clearTimeout(timer);
+  }, []);
 
   const slide = slides[current];
   const isLast = current === slides.length - 1;
@@ -258,133 +294,138 @@ export function OnboardingScreen() {
   };
 
   return (
-    <div
-      className="h-full flex flex-col relative overflow-hidden select-none"
-      style={{ fontFamily: "'Outfit', sans-serif", background: slide.bg, transition: 'background 0.6s ease' }}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
-    >
-      {/* Skip button */}
-      <div className="absolute top-0 right-0 z-30 px-6 pt-6">
-        {!isLast && (
-          <motion.button
-            key={current}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            onClick={() => navigate('/login')}
-            className="text-[10px] font-bold tracking-[0.2em] uppercase"
-            style={{ color: slide.textColor, opacity: 0.4 }}
-          >
-            SKIP
-          </motion.button>
-        )}
-      </div>
+    <>
+      <AnimatePresence>
+        {showSplash && <SplashScreen key="splash" />}
+      </AnimatePresence>
 
-      {/* Logo */}
-      <div className="absolute top-0 left-0 z-30 px-6 pt-6">
-        <img
-          src={logo}
-          className="h-8 w-auto"
-          alt="Nanopie"
-          style={{ filter: slide.bg === '#E4EEF0' ? 'none' : 'brightness(0) invert(1)' }}
-        />
-      </div>
-
-      {/* Illustration Area */}
-      <div className="flex-1 relative overflow-hidden">
-        <AnimatePresence custom={direction} mode="wait">
-          <motion.div
-            key={current}
-            custom={direction}
-            variants={variants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{ type: 'spring', stiffness: 300, damping: 35 }}
-            className="absolute inset-0"
-          >
-            {IllustrationMap[slide.illustration]}
-          </motion.div>
-        </AnimatePresence>
-      </div>
-
-      {/* Bottom Content Card */}
-      <div className="relative z-20 px-6 pb-8 pt-0">
-        <AnimatePresence custom={direction} mode="wait">
-          <motion.div
-            key={current}
-            custom={direction}
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 35 }}
-          >
-            {/* Badge */}
-            <div
-              className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 mb-5"
-              style={{ background: `${slide.accent}20`, border: `1px solid ${slide.accent}30` }}
+      <div
+        className="h-full flex flex-col relative overflow-hidden select-none"
+        style={{ fontFamily: "'Outfit', sans-serif", background: slide.bg, transition: 'background 0.6s ease' }}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
+        {/* Skip button */}
+        <div className="absolute top-0 right-0 z-30 px-6 pt-6">
+          {!isLast && (
+            <motion.button
+              key={current}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              onClick={() => navigate('/login')}
+              className="text-[10px] font-bold tracking-[0.2em] uppercase"
+              style={{ color: slide.textColor, opacity: 0.4 }}
             >
-              <span className="w-1.5 h-1.5 rounded-full" style={{ background: slide.accent }} />
-              <span className="text-[9px] font-bold tracking-[0.25em]" style={{ color: slide.accent }}>
-                {slide.badge}
-              </span>
+              SKIP
+            </motion.button>
+          )}
+        </div>
+
+        {/* Logo */}
+        <div className="absolute top-0 left-0 z-30 px-6 pt-6">
+          <img
+            src={logo}
+            className="h-8 w-auto"
+            alt="Nanopie"
+            style={{ filter: slide.bg === '#E4EEF0' ? 'none' : 'brightness(0) invert(1)' }}
+          />
+        </div>
+
+        {/* Illustration Area */}
+        <div className="flex-1 relative overflow-hidden">
+          <AnimatePresence custom={direction} mode="wait">
+            <motion.div
+              key={current}
+              custom={direction}
+              variants={variants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ type: 'spring', stiffness: 300, damping: 35 }}
+              className="absolute inset-0"
+            >
+              {IllustrationMap[slide.illustration]}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Bottom Content Card */}
+        <div className="relative z-20 px-6 pb-8 pt-0">
+          <AnimatePresence custom={direction} mode="wait">
+            <motion.div
+              key={current}
+              custom={direction}
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 35 }}
+            >
+              {/* Badge */}
+              <div
+                className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 mb-5"
+                style={{ background: `${slide.accent}20`, border: `1px solid ${slide.accent}30` }}
+              >
+                <span className="text-[9px] font-bold tracking-[0.25em]" style={{ color: slide.accent }}>
+                  {slide.badge}
+                </span>
+              </div>
+
+              {/* Headline */}
+              <h1
+                className="text-[38px] font-normal leading-[1.1] tracking-tight mb-4 whitespace-pre-line"
+                style={{ color: slide.textColor }}
+              >
+                {slide.headline}
+              </h1>
+
+              {/* Sub */}
+              <p
+                className="text-[14px] font-light leading-relaxed mb-8 max-w-[280px]"
+                style={{ color: slide.textColor, opacity: 0.6 }}
+              >
+                {slide.sub}
+              </p>
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Controls Row */}
+          <div className="flex items-center justify-between">
+            {/* Dot indicators */}
+            <div className="flex items-center gap-2">
+              {slides.map((_, i) => (
+                <button key={i} onClick={() => goTo(i)} className="p-1">
+                  <motion.div
+                    animate={{
+                      width: i === current ? 24 : 6,
+                      opacity: i === current ? 1 : 0.3,
+                    }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                    className="h-1.5 rounded-full"
+                    style={{ background: slide.accent }}
+                  />
+                </button>
+              ))}
             </div>
 
-            {/* Headline */}
-            <h1
-              className="text-[38px] font-normal leading-[1.1] tracking-tight mb-4 whitespace-pre-line"
-              style={{ color: slide.textColor }}
+            {/* CTA Button */}
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={goNext}
+              className="flex items-center gap-3 pl-6 pr-5 py-4 rounded-full font-bold text-sm shadow-xl transition-all"
+              style={{
+                background: slide.accent,
+                color: slide.bg === '#FF5B04' ? '#16232B' : '#fff',
+                boxShadow: `0 16px 40px ${slide.accent}40`,
+              }}
             >
-              {slide.headline}
-            </h1>
-
-            {/* Sub */}
-            <p
-              className="text-[14px] font-light leading-relaxed mb-8 max-w-[280px]"
-              style={{ color: slide.textColor, opacity: 0.6 }}
-            >
-              {slide.sub}
-            </p>
-          </motion.div>
-        </AnimatePresence>
-
-        {/* Controls Row */}
-        <div className="flex items-center justify-between">
-          {/* Dot indicators */}
-          <div className="flex items-center gap-2">
-            {slides.map((_, i) => (
-              <button key={i} onClick={() => goTo(i)} className="p-1">
-                <motion.div
-                  animate={{
-                    width: i === current ? 24 : 6,
-                    opacity: i === current ? 1 : 0.3,
-                  }}
-                  transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                  className="h-1.5 rounded-full"
-                  style={{ background: slide.accent }}
-                />
-              </button>
-            ))}
+              {isLast ? 'Get Started' : 'Next'}
+              <div className="w-7 h-7 rounded-full flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.2)' }}>
+                <ArrowRight size={14} strokeWidth={2.5} />
+              </div>
+            </motion.button>
           </div>
-
-          {/* CTA Button */}
-          <motion.button
-            whileTap={{ scale: 0.95 }}
-            onClick={goNext}
-            className="flex items-center gap-3 pl-6 pr-5 py-4 rounded-full font-bold text-sm shadow-xl transition-all"
-            style={{
-              background: slide.accent,
-              color: slide.bg === '#FF5B04' ? '#16232B' : '#fff',
-              boxShadow: `0 16px 40px ${slide.accent}40`,
-            }}
-          >
-            {isLast ? 'Get Started' : 'Next'}
-            <div className="w-7 h-7 rounded-full flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.2)' }}>
-              <ArrowRight size={14} strokeWidth={2.5} />
-            </div>
-          </motion.button>
         </div>
       </div>
-    </div>
+    </>
   );
 }
