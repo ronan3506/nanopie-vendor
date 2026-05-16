@@ -64,9 +64,10 @@ export function ActiveFundingScreen() {
           <div className="bg-white rounded-[24px] p-5 shadow-sm border border-[#16232B]/5">
             <p className="text-[9px] text-[#16232B]/40 uppercase tracking-widest font-bold mb-2">Raised So Far</p>
             <p className="text-xl font-medium text-[#16232B]">₹75,000</p>
-            <div className="w-full h-1 bg-[#16232B]/5 rounded-full mt-3 overflow-hidden">
-              <div className="h-full bg-[#FF5B04]" style={{ width: '62.5%' }}></div>
+            <div className="w-full h-2.5 bg-[#16232B]/5 rounded-full mt-4 overflow-hidden relative">
+              <div className="h-full bg-[#FF5B04] rounded-full shadow-[0_0_8px_rgba(255,91,4,0.3)]" style={{ width: '62.5%' }}></div>
             </div>
+
           </div>
           <div className="bg-white rounded-[24px] p-5 shadow-sm border border-[#16232B]/5">
             <p className="text-[9px] text-[#16232B]/40 uppercase tracking-widest font-bold mb-2">Target</p>

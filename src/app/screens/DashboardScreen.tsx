@@ -242,9 +242,10 @@ export function DashboardScreen() {
             
             <div className="absolute bottom-8 left-8 right-8">
               <p className="text-white text-2xl font-medium tracking-tight mb-4">Diwali Sweets Expansion</p>
-              <div className="w-full h-1.5 bg-white/20 rounded-full overflow-hidden mb-3">
-                <div className="h-full bg-[#FF5B04] rounded-full" style={{ width: '62.5%' }}></div>
+              <div className="w-full h-2.5 bg-white/20 rounded-full overflow-hidden mb-4">
+                <div className="h-full bg-[#FF5B04] rounded-full shadow-[0_0_8px_rgba(255,91,4,0.4)]" style={{ width: '62.5%' }}></div>
               </div>
+
               <div className="flex justify-between items-center">
                 <span className="text-white/60 text-[10px] uppercase tracking-[0.15em] font-bold">62.5% Funded</span>
                 <span className="text-white/60 text-[10px] uppercase tracking-[0.15em] font-bold">12 Days Left</span>
