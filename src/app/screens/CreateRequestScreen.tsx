@@ -265,8 +265,10 @@ export function CreateRequestScreen() {
         </AnimatePresence>
       </div>
 
-      {/* Fixed CTA */}
-      <div className="fixed bottom-0 left-0 right-0 px-6 pb-10 pt-4 bg-[#E4EEF0] max-w-md mx-auto border-t border-[#16232B]/8">
+      {/* Absolute CTA pinned to phone frame bottom */}
+      <div className="absolute bottom-0 left-0 right-0 px-6 pb-12 pt-6 bg-[#E4EEF0] z-40 border-t border-[#16232B]/5">
+
+
         {step < 5 ? (
           <button
             onClick={handleNext}
